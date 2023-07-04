@@ -15,19 +15,10 @@
         ></v-btn>
       </div>
   
-      <div class="pt-0">
-        <v-container>
-            <v-card color="primary" class="phoneCard py-3 px-8">
-                <v-icon class="phoneIcon pr-2" icon="mdi-cellphone-sound"></v-icon>
-                Nous contacter<p class="px-2 text" style="color: #757367;"> 8:30-12:30 / 13:30-17:15 (Ven 15:30)</p>+33 (0)4 92 08 40 40
-            </v-card>
-        </v-container>  
-      </div>
-  
       <v-divider></v-divider>
   
       <div>
-        {{ new Date().getFullYear() }} — <strong>Fayat Bâtiment</strong>
+        {{ new Date().getFullYear() }} — <strong>GameDash</strong>
       </div>
     </v-footer>
   </template>
@@ -39,17 +30,17 @@ export default {
 
     data: () => ({
         links: [
-                { icon: 'mdi-twitter', 
-                web: 'https://twitter.com/GroupeFayat'},
+                { icon: 'mdi-email-edit ', 
+                web: 'mailto:arnaud.cossu@gmail.com?subject=Message GameDash'},
 
-                { icon: 'mdi-instagram', 
-                web: 'https://www.instagram.com/fayatbatiment/'},
-
-                { icon: 'mdi-facebook', 
-                web: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffayat.com%2Ffr%2Fmetiers'},
+                { icon: 'mdi-github', 
+                web: 'https://github.com/ArnaudCs'},
 
                 { icon: 'mdi-linkedin', 
-                web: 'https://www.linkedin.com/company/fayatbatiment/'},
+                web: 'https://www.linkedin.com/in/arnaud-c-65357215a/'},
+
+                { icon: 'mdi-web', 
+                web: 'https://arnaudcs.github.io/'},
             ],
     }),
 }

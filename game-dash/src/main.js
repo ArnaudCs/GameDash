@@ -28,7 +28,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 const routes = [
   { path: '/', component: HelloWorld, meta: { requiresAuth: true } },
   { path: '/login', component: Login },
-  { path: '/register', component: Register }
+  { path: '/register', component: Register },
+  { path: '/profile', component: Register, meta: { requiresAuth: true }},
 ];
 
 const getCurrentUser = () => {

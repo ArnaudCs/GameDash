@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer color="#03539D" v-model="drawer" temporary class="drawer" style="width: 100%; opacity: 0.95; padding-top: 15vh;">
+    <v-navigation-drawer color="secondary" v-model="drawer" temporary class="drawer" style="width: 100%; opacity: 0.95; padding-top: 15vh;">
       <v-list class="drawer" nav v-for="(menu, index) in menus" :key="index">
         <v-list-item @click="drawer = null" :href=menu.link>
           <v-list-item-title class="mobileLinks" @click="drawer = null">{{menu.title}}</v-list-item-title>
@@ -12,14 +12,12 @@
     <v-app-bar
       app
       elevation="0"
-      color="#03539D"
+      color="secondary"
       elevate-on-scroll
       class="appBar">
     
-      <v-toolbar-title v-if="windowWidth > 350" class="logoNav">
-        <v-avatar class="logoAvatar mr-2"><router-link to="/" class="router-link">
-          <v-img src="../assets/logo.png"></v-img></router-link></v-avatar>
-          <router-link to="/" class="router-link" style="text-decoration: none; color: white;">FayatSoft</router-link>
+      <v-toolbar-title v-if="windowWidth > 350" class="logoNav">  
+          <router-link to="/" class="router-link logo" style="text-decoration: none; color: white; ">GameDash</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-if="windowWidth > 945">
@@ -28,7 +26,7 @@
             <v-list-item-title class="menus">{{menu.title}}</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <router-link to="/profile"><v-avatar><v-img src="../assets/profileWorker.png"></v-img></v-avatar><v-tooltip
+            <router-link to="/profile"><v-avatar rounded="0"><v-img src="../assets/logo.png"></v-img></v-avatar><v-tooltip
               activator="parent"
               location="bottom"
             >Profil</v-tooltip>
@@ -76,7 +74,7 @@
           ex11: 'enable',
           menus: [
             {
-              title: 'Mes Chantiers', // Ajoutez le bouton "Dashboard"
+              title: 'Mes Jeux', // Ajoutez le bouton "Dashboard"
               link: '/dashboard',
               icon: 'mdi-view-dashboard',
             },
@@ -99,6 +97,20 @@
   </script>
   
   <style scoped>
+
+@import url('https://fonts.cdnfonts.com/css/asteroid-type');
+
+  .logo{
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    display: flex;
+    align-items: center;
+    border: solid white 3px;
+    border-radius: 2em;
+  }
+
   .mobileLinks{
     font-size: 1.5rem;
     line-height: 50px;
