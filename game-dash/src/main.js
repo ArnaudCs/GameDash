@@ -51,12 +51,20 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (await getCurrentUser()) {
+      // Utilisateur connecté
       next()
     } else {
+      // Utilisateur non connecté
       next({ path: '/login' })
     }
   } else {
-    next()
+    // Vérification spécifique pour les routes /register et /login
+    if ((to.path === '/register' || to.path === '/login') && await getCurrentUser()) {
+      // Utilisateur connecté essayant d'accéder à /register ou /login
+      next({ path: '/' }) // Redirection vers une autre page, par exemple la page d'accueil
+    } else {
+      next() // Autoriser l'accès à la route normalement
+    }
   }
 })
 

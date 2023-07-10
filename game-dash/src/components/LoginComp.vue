@@ -100,7 +100,7 @@
         </v-card>
 
         <v-snackbar v-if="errorMessage" v-model="errorMessage" color="error" top right>
-            {{this.errorMessage}}
+            {{errorMessage}}
         </v-snackbar>
     </div>
 </template>
