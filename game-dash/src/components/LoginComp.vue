@@ -127,7 +127,7 @@
       methods: {
         login() {
           console.log(this.mail, this.password);
-          signInWithEmailAndPassword(getAuth(), this.mail, this.password)
+          signInWithEmailAndPassword(getAuth(), this.email, this.password)
             .then((userCredential) => {
                 this.$router.push('/');
                 console.log(userCredential);
@@ -153,8 +153,6 @@
                         this.errorMessage = 'Une erreur est survenue';
                         break;
                 }
-
-              // ..
             });
         },
         loginWithGoogle() {

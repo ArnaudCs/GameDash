@@ -6,7 +6,7 @@
         </v-list-item>
       </v-list>
       <div class="closeBtn d-flex align-center justify-center">
-        <v-btn variant="text" :ripple="false" @click="drawer = false"><v-icon size="x-large" icon="mdi-tools" style="color: white;"></v-icon></v-btn>
+        <v-btn variant="text" :ripple="false" @click="drawer = false"><v-icon size="x-large" icon="mdi-close-outline" style="color: white;"></v-icon></v-btn>
       </div>
     </v-navigation-drawer>
     <v-app-bar
@@ -48,8 +48,11 @@
       </v-menu>
       <div id="container" v-if="windowWidth <= 945" style="display: flex; justify-content: flex-end;">
         <v-list-item>
-          <router-link to="/profile"><v-avatar><v-img src="../assets/profileWorker.png">
-          </v-img></v-avatar></router-link>
+          <router-link to="/profile"><v-avatar rounded="0"><v-img src="../assets/logo.png"></v-img></v-avatar><v-tooltip
+              activator="parent"
+              location="bottom"
+            >Profil</v-tooltip>
+          </router-link>
         </v-list-item>
       </div>
     </v-app-bar>
@@ -151,9 +154,8 @@
   
   @media only screen and (max-device-width : 450px) {
     .logo{
-      font-size: 2em;
+      font-size: 1em;
       font-weight: 700;
-      margin-left: 4vw;
     }
     .logoNav {
       font-size: 4vw;

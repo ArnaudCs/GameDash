@@ -55,7 +55,6 @@
                             prepend-icon="mdi-check-all"
                             clearable
                             required
-
                             :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="show2 ? 'text' : 'password'"
                             @click:append="show2 = !show2"
@@ -67,12 +66,12 @@
                     </v-responsive>
                 </v-card-text>
                 <v-card-actions class="justify-center cardActions">
-                    <v-btn rounded="pill" variant="outlined" type="submit" size="large" class="text-white px-3 mb-5" color="#FFD700"    
+                    <v-btn rounded="pill" @click="register" variant="outlined" type="submit" size="large" class="text-white px-3 mb-5" color="#FFD700"    
                      :disabled="password !== passwordConfirmation">
                         Register
                     </v-btn>
 
-                    <v-btn rounded="pill" @click="register" variant="elevated" type="submit" prepend-icon="mdi-google" size="large" class="text-white px-3 mb-5" color="red" >
+                    <v-btn v-if="this.Nickname !== ''" rounded="pill" @click="registerWithGoogle" variant="elevated" type="submit" prepend-icon="mdi-google" size="large" class="text-white px-3 mb-5" color="red" >
                         Register with Google
                     </v-btn>
 
@@ -94,16 +93,15 @@
   </template>
   <script>
   import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+  import { getFirestore, collection, addDoc } from "firebase/firestore";
+
     export default {
       data: () => ({
         show1: false,
         show2: false,
         mailSnackBar: false,
         phoneSnackBar: false,
-        name: '',
-        firstName: '',
-        company: '',
-        phone: '',
+        Nickname: '',
         email: '',
         password: '',
         passwordConfirmation: '',
@@ -113,32 +111,58 @@
       }),
       methods: {
         register() {
-          console.log(this.mail, this.password);
-          createUserWithEmailAndPassword(getAuth(), this.mail, this.password)
-            .then((userCredential) => {
-              // Signed in 
-              console.log('connecté avec succèus');
-              console.log(userCredential);
-              // ...
-            })
-            .catch((error) => {
-              const errorCode = error.code;
-              const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
+            const auth = getAuth();
+            const db = getFirestore();
 
-              // ..
-            });
+            createUserWithEmailAndPassword(auth, this.email, this.password)
+                .then((userCredential) => {
+                // Récupérer l'identifiant de l'utilisateur
+                const user = userCredential.user;
+                const userId = user.uid;
+                const userName = this.Nickname;
+                const userEmail = this.email;
+
+                // Ajouter le tuple dans la collection "User" avec l'identifiant de l'utilisateur
+                const userRef = collection(db, "User");
+                addDoc(userRef, { userId, userName, userEmail })
+                    .then(() => {
+                        this.$router.push('/'); 
+                    })
+                    .catch((error) => {
+                    console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                    });
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode, errorMessage);
+                });
         },
         registerWithGoogle() {
             const provider = new GoogleAuthProvider();
-            signInWithPopup(getAuth(), provider)
+            const auth = getAuth();
+            const db = getFirestore();
+
+            signInWithPopup(auth, provider)
                 .then((result) => {
-                    console.log(result);
-                    this.$router.push('/')
-                    // ...
-                }).catch((error) => {
+                // Récupérer les informations de l'utilisateur
+                const user = result.user;
+                const userId = user.uid;
+                const userName = user.displayName;
+                const userEmail = user.email;
+
+                // Ajouter le tuple dans la collection "User" avec les informations de l'utilisateur
+                const userRef = collection(db, "User");
+                addDoc(userRef, { userId, userName, userEmail })
+                    .then(() => {
+                        this.$router.push('/');
+                    })
+                    .catch((error) => {
+                        console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                    });
+                })
+                .catch((error) => {
                     console.log(error);
-                    
                 });
         }
       }

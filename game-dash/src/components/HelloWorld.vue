@@ -8,25 +8,22 @@
     <div class="lastAddedDisplay">
       <p class="lastAddedTitle">Last Added Items</p>
       <div class="lastAddedCardContainer">
-        <v-row>
-          <v-col cols="4">
+        <v-row class="lastAddedColumn">
+          <v-col cols="12" sm="6" md="4">
             <v-card class="lastAddedCard">
               <v-card-title>Add 1</v-card-title>
-              <!-- Contenu de la carte de la colonne 1 -->
             </v-card>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="12" sm="6" md="4">
             <v-card class="lastAddedCard">
               <v-card-title>Add 2</v-card-title>
-              <!-- Contenu de la carte de la colonne 1 -->
             </v-card>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="12" sm="6" md="4">
             <v-card class="lastAddedCard">
               <v-card-title>Add 3</v-card-title>
-              <!-- Contenu de la carte de la colonne 1 -->
             </v-card>
           </v-col>
         </v-row>
@@ -37,15 +34,14 @@
       <p class="addItemTitle">Add an Item</p>
       <div class="addItemContainer">
         <v-row class="addItemRow">
-          <v-col cols="4" class="coverColumn">
+          <v-col cols="12" sm="4" class="coverColumn">
             <v-img src="../assets/mario.png" class="addItemCover"></v-img>
           </v-col>
 
-          <v-col cols="8">
+          <v-col cols="12" sm="8">
             <p class="addItemTitle">Add an Item to your collection to keep track</p>
             <v-card class="lastAddedCard mt-5">
               <v-card-title>Ajout 2</v-card-title>
-              <!-- Contenu de la carte de la colonne 1 -->
             </v-card>
           </v-col>
         </v-row>
@@ -98,10 +94,10 @@ export default {
 <style scoped>
 
 .main{
-  padding-top: 2em;
-  padding-left: 5em;
-  padding-right: 5em;
-  padding-bottom: 5em;
+  padding-top: 4vh;
+  padding-left: 4vw;
+  padding-right: 4vw;
+  padding-bottom: 10vh;
 }
 .actionBar{
   display: flex;
@@ -131,6 +127,11 @@ export default {
   border-radius: 1em;
 }
 
+.lastAddedColumn{
+  display: flex;
+  justify-content: center;
+}
+
 .addItemDisplay{
   padding: 1em;
   border-radius: 1em;
@@ -149,7 +150,7 @@ export default {
 
 .addItemRow{
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .addItemCover{
