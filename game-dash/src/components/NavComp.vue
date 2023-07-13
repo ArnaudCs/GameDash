@@ -77,7 +77,7 @@
           ex11: 'enable',
           menus: [
             {
-              title: 'Mes Jeux', // Ajoutez le bouton "Dashboard"
+              title: 'Ma collection', // Ajoutez le bouton "Dashboard"
               link: '/dashboard',
               icon: 'mdi-view-dashboard',
             },

@@ -1,4 +1,7 @@
 <template>
+
+  <loading-element v-if="isLoading"></loading-element>
+
   <div class="main">
     <div class="actionBar">
       <h2>Hello {{ nickName }}</h2>
@@ -8,11 +11,21 @@
     <div class="lastAddedDisplay">
       <p class="lastAddedTitle">Last Added Items</p>
       <div class="lastAddedCardContainer">
-        <v-row class="lastAddedColumn">
+        <v-row v-if="this.lastAddedItems.length > 0" class="lastAddedColumn">
           <v-col v-for="item in lastAddedItems.slice(0, 3)" :key="item.id" cols="12" sm="6" md="4">
-            <v-card class="lastAddedCard">
-              <v-card-title>{{ item.Name }}</v-card-title>
+            <v-card class="lastAddedCard" elevation="8">
+              <v-img class="ItemsImages"
+                height="200"
+                :src="item.photoURL"
+                cover
+                ></v-img>
+              <v-card-title>
+                <v-icon v-if=" item.Type === 'Console'" color="red" icon="mdi-nintendo-game-boy" class="mr-1"></v-icon>
+                <v-icon v-if=" item.Type === 'Accessories'" color="grey" icon="mdi-video-input-scart" class="mr-1"></v-icon>
+                <v-icon v-if=" item.Type === 'Games'" color="yellow" icon="mdi-pac-man" class="mr-1"></v-icon>
+                {{ item.Name }}</v-card-title>
               <v-card-text>
+                <v-divider class="mb-3"></v-divider>
                 <p>Brand : {{ item.Brand }}</p>
                 <p>Model : {{ item.Model }}</p>
                 <p>Console : {{ item.Console }}</p>
@@ -22,6 +35,10 @@
             </v-card>
           </v-col>
         </v-row>
+
+        <div v-else class="noLastItem">
+          <p>Your last added items will be displayed here</p>
+        </div>
       </div>
     </div>
 
@@ -47,9 +64,11 @@
 </template>
 
 <script>
+import LoadingElement from './LoadingElement.vue';
 import { onMounted, reactive } from "vue";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 
 let auth;
 const state = reactive({
@@ -59,13 +78,14 @@ const state = reactive({
 
 export default {
   name: 'HelloWorld',
-
+  components: { LoadingElement },
   data() {
     return {
       state,
       nickName: '',
       email: '',
       userId: '',
+      isLoading: true,
       lastAddedItems: [],
     };
   },
@@ -101,13 +121,32 @@ export default {
           console.log(userData);
         });
 
-        //getting user items
+        // Récupération des items de l'utilisateur
         const queryItemSnapshot = await getDocs(query(itemCollection, where("UserId", "==", uid)));
 
-        queryItemSnapshot.forEach((doc) => {
+        const storage = getStorage();
+        const storageRef = ref(storage);
+
+        queryItemSnapshot.forEach(async (doc) => {
           const itemData = doc.data();
-          this.lastAddedItems.push(itemData);
-          console.log(this.lastAddedItems);
+          const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
+
+          try {
+            const folderRef = ref(storageRef, `Items/${photoFolderName}`);
+            const folderList = await listAll(folderRef);
+            const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
+
+            if (firstPhotoRef) {
+              const photoURL = await getDownloadURL(firstPhotoRef);
+              itemData.photoURL = photoURL; // Ajoutez la propriété photoURL à l'objet itemData
+            }
+
+            this.lastAddedItems.push(itemData);
+          } catch (error) {
+            console.log("Erreur lors du téléchargement de la photo :", error);
+          }
+
+          this.isLoading = false;
         });
       } else {
         console.log('No user connected');
@@ -128,6 +167,18 @@ export default {
 
 <style scoped>
 
+.noLastItem{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  margin-top: 4vh;
+}
+
+.projectImages{
+  object-fit: none !important;
+}
+
 .main{
   padding-top: 4vh;
   padding-left: 4vw;
@@ -142,7 +193,7 @@ export default {
 }
 
 .lastAddedDisplay{
-  padding: 1em;
+  padding: 1.5em;
   border-radius: 1em;
   background-color: #242C36;
   margin-bottom: 2em;
@@ -168,7 +219,7 @@ export default {
 }
 
 .addItemDisplay{
-  padding: 1em;
+  padding: 1.5em;
   border-radius: 1em;
   background-color: #242C36;
 }
