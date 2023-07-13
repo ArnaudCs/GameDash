@@ -13,7 +13,7 @@
       <div class="lastAddedCardContainer">
         <v-row v-if="this.lastAddedItems.length > 0" class="lastAddedColumn">
           <v-col v-for="item in lastAddedItems.slice(0, 3)" :key="item.id" cols="12" sm="6" md="4">
-            <v-card class="lastAddedCard" elevation="8">
+            <v-card class="lastAddedCard" elevation="8" color="primary">
               <v-img class="ItemsImages"
                 height="200"
                 :src="item.photoURL"
@@ -131,23 +131,26 @@ export default {
           const itemData = doc.data();
           const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
 
-          try {
-            const folderRef = ref(storageRef, `Items/${photoFolderName}`);
-            const folderList = await listAll(folderRef);
-            const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
+            try {
+              const folderRef = ref(storageRef, `Items/${photoFolderName}`);
+              const folderList = await listAll(folderRef);
+              const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
 
-            if (firstPhotoRef) {
-              const photoURL = await getDownloadURL(firstPhotoRef);
-              itemData.photoURL = photoURL; // Ajoutez la propriété photoURL à l'objet itemData
+              if (firstPhotoRef) {
+                const photoURL = await getDownloadURL(firstPhotoRef);
+                itemData.photoURL = photoURL; // Ajoutez la propriété photoURL à l'objet itemData
+              } else {
+                itemData.photoURL = require("../assets/noImage.jpg"); // Aucune photo trouvée, utilisez l'image "noImage.jpg"
+              }
+
+              this.lastAddedItems.push(itemData);
+            } catch (error) {
+              console.log("Erreur lors du téléchargement de la photo :", error);
             }
-
-            this.lastAddedItems.push(itemData);
-          } catch (error) {
-            console.log("Erreur lors du téléchargement de la photo :", error);
-          }
 
           this.isLoading = false;
         });
+        this.isLoading = false;
       } else {
         console.log('No user connected');
       }
