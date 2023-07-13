@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="actionBar">
-      <h2>Hello {{ userMail }}</h2>
+      <h2>Hello {{ nickName }}</h2>
       <v-btn v-if="state.isSignedIn" @click="handleSignout" color="ghostPurple" icon="mdi-power"></v-btn>
     </div>
 
@@ -9,21 +9,16 @@
       <p class="lastAddedTitle">Last Added Items</p>
       <div class="lastAddedCardContainer">
         <v-row class="lastAddedColumn">
-          <v-col cols="12" sm="6" md="4">
+          <v-col v-for="item in lastAddedItems.slice(0, 3)" :key="item.id" cols="12" sm="6" md="4">
             <v-card class="lastAddedCard">
-              <v-card-title>Add 1</v-card-title>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" sm="6" md="4">
-            <v-card class="lastAddedCard">
-              <v-card-title>Add 2</v-card-title>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" sm="6" md="4">
-            <v-card class="lastAddedCard">
-              <v-card-title>Add 3</v-card-title>
+              <v-card-title>{{ item.Name }}</v-card-title>
+              <v-card-text>
+                <p>Brand : {{ item.Brand }}</p>
+                <p>Model : {{ item.Model }}</p>
+                <p>Console : {{ item.Console }}</p>
+                <p>With Box : {{ item.OriginalBox ? 'Yes' : 'No' }}</p>
+                <p>Condition : {{ item.State }}</p>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -54,6 +49,8 @@
 <script>
 import { onMounted, reactive } from "vue";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+
 let auth;
 const state = reactive({
   isSignedIn: false,
@@ -65,8 +62,15 @@ export default {
 
   data() {
     return {
-      state
+      state,
+      nickName: '',
+      email: '',
+      userId: '',
+      lastAddedItems: [],
     };
+  },
+  mounted() {
+    this.fetchUserData();
   },
   methods: {
     handleSignout() {
@@ -77,7 +81,38 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
+    },
+    async fetchUserData() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        const uid = user.uid;
+
+        const db = getFirestore();
+        const userCollection = collection(db, "User");
+        const itemCollection = collection(db, "Items");
+
+        const querySnapshot = await getDocs(query(userCollection, where("userId", "==", uid)));
+
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          this.nickName = userData.userName;
+          console.log(userData);
+        });
+
+        //getting user items
+        const queryItemSnapshot = await getDocs(query(itemCollection, where("UserId", "==", uid)));
+
+        queryItemSnapshot.forEach((doc) => {
+          const itemData = doc.data();
+          this.lastAddedItems.push(itemData);
+          console.log(this.lastAddedItems);
+        });
+      } else {
+        console.log('No user connected');
+      }
+    },
   },
   setup() {
     onMounted(() => {

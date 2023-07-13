@@ -199,10 +199,6 @@
     width: 100%;
 }
 
-.homeBtn{   
-    margin-top: 4vh;
-}
-
 .main{
     display: flex;
     align-items: center;
@@ -226,9 +222,15 @@
     text-align: center;
 }
 
+@media only screen and (max-width: 1000px) {
+    .loginCard {
+        width: 70%;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .loginCard {
-        max-width: 90%;
+        width: 90%;
     }
 
     .LoginTitle{

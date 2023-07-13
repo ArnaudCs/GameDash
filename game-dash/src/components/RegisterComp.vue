@@ -71,7 +71,7 @@
                         Register
                     </v-btn>
 
-                    <v-btn v-if="this.Nickname !== ''" rounded="pill" @click="registerWithGoogle" variant="elevated" type="submit" prepend-icon="mdi-google" size="large" class="text-white px-3 mb-5" color="red" >
+                    <v-btn rounded="pill" @click="registerWithGoogle" variant="elevated" type="submit" prepend-icon="mdi-google" size="large" class="text-white px-3 mb-5" color="red" >
                         Register with Google
                     </v-btn>
 
@@ -129,13 +129,11 @@
                         this.$router.push('/'); 
                     })
                     .catch((error) => {
-                    console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                        console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
                     });
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode, errorMessage);
+                    console.log(error);
                 });
         },
         registerWithGoogle() {
