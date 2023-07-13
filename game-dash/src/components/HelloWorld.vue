@@ -127,30 +127,38 @@ export default {
         const storage = getStorage();
         const storageRef = ref(storage);
 
-        queryItemSnapshot.forEach(async (doc) => {
+        const fetchPhotoPromises = queryItemSnapshot.docs.map(async (doc) => {
           const itemData = doc.data();
           const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
 
-            try {
-              const folderRef = ref(storageRef, `Items/${photoFolderName}`);
-              const folderList = await listAll(folderRef);
-              const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
+          try {
+            const folderRef = ref(storageRef, `Items/${photoFolderName}`);
+            const folderList = await listAll(folderRef);
+            const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
 
-              if (firstPhotoRef) {
-                const photoURL = await getDownloadURL(firstPhotoRef);
-                itemData.photoURL = photoURL; // Ajoutez la propriété photoURL à l'objet itemData
-              } else {
-                itemData.photoURL = require("../assets/noImage.jpg"); // Aucune photo trouvée, utilisez l'image "noImage.jpg"
-              }
-
-              this.lastAddedItems.push(itemData);
-            } catch (error) {
-              console.log("Erreur lors du téléchargement de la photo :", error);
+            if (firstPhotoRef) {
+              const photoURL = await getDownloadURL(firstPhotoRef);
+              itemData.photoURL = photoURL; // Ajoutez la propriété photoURL à l'objet itemData
+            } else {
+              itemData.photoURL = require("../assets/noImage.jpg");
             }
 
-          this.isLoading = false;
+            return itemData;
+          } catch (error) {
+            console.log("Erreur lors du téléchargement de la photo :", error);
+            itemData.photoURL = require("../assets/noImage.jpg");
+            return itemData;
+          }
         });
-        this.isLoading = false;
+
+        try {
+          const fetchedItems = await Promise.all(fetchPhotoPromises);
+          this.lastAddedItems = fetchedItems;
+          this.isLoading = false;
+        } catch (error) {
+          console.log("Erreur lors de la récupération des photos :", error);
+          this.isLoading = false;
+        }
       } else {
         console.log('No user connected');
       }

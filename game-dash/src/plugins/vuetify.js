@@ -21,8 +21,6 @@ export default createVuetify({
           primary: '#ffffff',
           btnText: '#ffffff',
           buttonDownload: '#1E3851',
-          fayatBlue : '#0053A0',
-          fayatYellow : '#FFD700',
           ghostPurple: '#8154AF',
           nesDown: '#5C5A5A',
           nesUpper: '#D2CFCB',
@@ -36,11 +34,10 @@ export default createVuetify({
           background: '#181E26',
           hamburger: '#ffffff',
           buttonDownload: '#242C36',
-          fayatBlue : '#0053A0',
-          fayatYellow : '#FFD700',
           ghostPurple: '#8154AF',
           nesDown: '#5C5A5A',
           nesUpper: '#D2CFCB',
+          
         }
       },
     },
