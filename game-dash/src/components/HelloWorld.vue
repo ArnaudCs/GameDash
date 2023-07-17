@@ -54,6 +54,9 @@
             <p class="addItemTitle">Add an Item to your collection to keep track</p>
             <v-card class="lastAddedCard mt-5">
               <v-card-title>Ajout 2</v-card-title>
+              <v-card-text>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/additem'">Add item</v-btn>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-row>

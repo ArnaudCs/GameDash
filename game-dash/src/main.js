@@ -5,6 +5,7 @@ import { loadFonts } from './plugins/webfontloader'
 import HelloWorld from './components/HelloWorld.vue'
 import Login from './components/LoginComp.vue'
 import Register from './components/RegisterComp.vue'
+import AddItem from './components/AddItemComp.vue'
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { initializeApp } from "firebase/app";
@@ -30,6 +31,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Register, meta: { requiresAuth: true }},
+  { path: '/additem', component: AddItem, meta: { requiresAuth: true }},
 ];
 
 const getCurrentUser = () => {
