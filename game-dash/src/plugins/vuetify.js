@@ -24,6 +24,7 @@ export default createVuetify({
           ghostPurple: '#8154AF',
           nesDown: '#5C5A5A',
           nesUpper: '#D2CFCB',
+          box: '#353D46',
         }
       },
       dark: {
@@ -37,7 +38,7 @@ export default createVuetify({
           ghostPurple: '#8154AF',
           nesDown: '#5C5A5A',
           nesUpper: '#D2CFCB',
-          
+          box: '#353D46',
         }
       },
     },
