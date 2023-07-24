@@ -20,6 +20,10 @@
                 </div>
 
                 <div class="inputForm">
+                    <v-text-field clearable label="Game Publisher" v-model="gamePublisher"></v-text-field>
+                </div>
+
+                <div class="inputForm">
                     <v-select
                         v-model="gameSystem"
                         :items="consoles"
@@ -159,6 +163,7 @@
             image2: '',
             image3: '',
             userId: '',
+            gamePublisher: '',
             haveBox: 'No',
             haveAllAccessories: 'No',
             gameParticularities: '',
@@ -379,13 +384,14 @@
               const OriginalBox = this.haveBox === 'Yes' ? true : false;
               const AllAccessories = this.haveAllAccessories === 'Yes' ? true : false;
               const State = this.gameCondition;
+              const Publisher = this.gamePublisher;
               const Particularities = this.gameParticularities;
               const PurchasePrice = this.purchasePrice;
               const Type = "Game";
               const AddDate = new Date();
 
                 const userRef = collection(db, "Games");
-                addDoc(userRef, { UserId, Brand, Console, Name, OriginalBox, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
+                addDoc(userRef, { UserId, Brand, Console, Name, OriginalBox, Publisher, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
                     .then(async (userRef) => {
                       this.successAddingItem = true;
 
@@ -538,9 +544,21 @@
   }
   .actionBar{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 2em;
+  }
+
+  .leftAction{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .rightAction{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
   
   .lastAddedDisplay{

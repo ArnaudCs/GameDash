@@ -4,8 +4,13 @@
   
     <div class="main">
       <div class="actionBar">
-        <v-btn @click="goBack" color="ghostPurple" icon="mdi-arrow-left" class="mr-4"></v-btn>
-        <h2>Your acessories</h2>
+        <div class="leftAction">
+          <v-btn @click="goBack" color="ghostPurple" icon="mdi-arrow-left" class="mr-4"></v-btn>
+          <h2>Your accessories</h2>
+        </div>
+        <div class="rightAction">
+          <v-btn color="ghostPurple" icon="mdi-plus" :to="'/addaccessories'"></v-btn>
+        </div>
       </div>
   
       <div class="lastAddedDisplay">
@@ -192,9 +197,21 @@
 
   .actionBar{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 2em;
+  }
+
+  .leftAction{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .rightAction{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
   
   .lastAddedDisplay{

@@ -6,15 +6,15 @@
       <div class="actionBar">
         <div class="leftAction">
           <v-btn @click="goBack" color="ghostPurple" icon="mdi-arrow-left" class="mr-4"></v-btn>
-          <h2>Your game collection</h2>
+          <h2>Your item collection</h2>
         </div>
         <div class="rightAction">
-          <v-btn color="ghostPurple" icon="mdi-plus" :to="'/addgame'"></v-btn>
+          <v-btn color="ghostPurple" icon="mdi-plus" :to="'/additem'"></v-btn>
         </div>
       </div>
   
       <div class="lastAddedDisplay">
-        <p class="lastAddedTitle">Your games</p>
+        <p class="lastAddedTitle">Your items</p>
         <div class="lastAddedCardContainer">
             <div v-if="this.myItems.length > 0">
                 <v-card v-for="item in myItems" :key="item.id" class="itemCard">
@@ -25,6 +25,7 @@
 
                         <v-col cols="12" sm="8">
                             <p>Brand : {{ item.Brand }}</p>
+                            <p>Model : {{ item.Model }}</p>
                             <p>Console : {{ item.Console }}</p>
                             <p>With Box : {{ item.OriginalBox ? 'Yes' : 'No' }}</p>
                             <p>Condition : {{ item.State }}</p>
@@ -33,7 +34,7 @@
                 </v-card>
             </div>
             <div v-else class="noLastItem">
-                <p>Your games will be displayed here</p>
+                <p>Your items will be displayed here</p>
             </div>
         </div>
       </div>
@@ -55,7 +56,7 @@
   });
   
   export default {
-    name: 'MyGameCollectionComp',
+    name: 'HelloWorld',
     components: { LoadingElement },
     data() {
       return {
@@ -92,7 +93,7 @@
   
           const db = getFirestore();
           const userCollection = collection(db, "User");
-          const itemCollection = collection(db, "Games");
+          const itemCollection = collection(db, "Items");
   
           const querySnapshot = await getDocs(query(userCollection, where("userId", "==", uid)));
   
@@ -119,7 +120,7 @@
             const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
   
             try {
-              const folderRef = ref(storageRef, `Games/${photoFolderName}`);
+              const folderRef = ref(storageRef, `Items/${photoFolderName}`);
               const folderList = await listAll(folderRef);
               const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
   
@@ -202,15 +203,16 @@
     margin-bottom: 2em;
   }
 
+  .actionBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+  }
+
   .leftAction{
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-  }
-
-  .rightAction{
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
   }
   
