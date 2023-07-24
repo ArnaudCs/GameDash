@@ -124,8 +124,14 @@ export default {
           console.log(userData);
         });
 
-        // Récupération des items de l'utilisateur
-        const queryItemSnapshot = await getDocs(query(itemCollection, where("UserId", "==", uid)));
+        // Récupérez les éléments triés par ordre décroissant de la date d'ajout (addDate)
+        const queryItemSnapshot = await getDocs(
+          query(
+            itemCollection,
+            where("UserId", "==", uid),
+            // orderBy("addDate", "desc") Tri par ordre décroissant de la date d'ajout (addDate)
+          )
+        );
 
         const storage = getStorage();
         const storageRef = ref(storage);

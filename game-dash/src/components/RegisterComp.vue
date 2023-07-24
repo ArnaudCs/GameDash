@@ -109,63 +109,63 @@
             min: v => !v || v.length >= 8 || 'Min 8 characters required',
         },
       }),
-      methods: {
-        register() {
-            const auth = getAuth();
-            const db = getFirestore();
+        methods: {
+            register() {
+                const auth = getAuth();
+                const db = getFirestore();
 
-            createUserWithEmailAndPassword(auth, this.email, this.password)
-                .then((userCredential) => {
-                // Récupérer l'identifiant de l'utilisateur
-                const user = userCredential.user;
-                const userId = user.uid;
-                const userName = this.Nickname;
-                const userEmail = this.email;
+                createUserWithEmailAndPassword(auth, this.email, this.password)
+                    .then((userCredential) => {
+                    // Récupérer l'identifiant de l'utilisateur
+                    const user = userCredential.user;
+                    const userId = user.uid;
+                    const userName = this.Nickname;
+                    const userEmail = this.email;
 
-                // Ajouter le tuple dans la collection "User" avec l'identifiant de l'utilisateur
-                const userRef = collection(db, "User");
-                addDoc(userRef, { userId, userName, userEmail })
-                    .then(() => {
-                        this.$router.push('/'); 
+                    // Ajouter le tuple dans la collection "User" avec l'identifiant de l'utilisateur
+                    const userRef = collection(db, "User");
+                    addDoc(userRef, { userId, userName, userEmail })
+                        .then(() => {
+                            this.$router.push('/'); 
+                        })
+                        .catch((error) => {
+                            console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                        });
                     })
                     .catch((error) => {
-                        console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                        console.log(error);
                     });
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        registerWithGoogle() {
-            const provider = new GoogleAuthProvider();
-            const auth = getAuth();
-            const db = getFirestore();
+            },
+            registerWithGoogle() {
+                const provider = new GoogleAuthProvider();
+                const auth = getAuth();
+                const db = getFirestore();
 
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                // Récupérer les informations de l'utilisateur
-                const user = result.user;
-                const userId = user.uid;
-                const userName = user.displayName;
-                const userEmail = user.email;
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                    // Récupérer les informations de l'utilisateur
+                    const user = result.user;
+                    const userId = user.uid;
+                    const userName = user.displayName;
+                    const userEmail = user.email;
 
-                // Ajouter le tuple dans la collection "User" avec les informations de l'utilisateur
-                const userRef = collection(db, "User");
-                addDoc(userRef, { userId, userName, userEmail })
-                    .then(() => {
-                        this.$router.push('/');
+                    // Ajouter le tuple dans la collection "User" avec les informations de l'utilisateur
+                    const userRef = collection(db, "User");
+                    addDoc(userRef, { userId, userName, userEmail })
+                        .then(() => {
+                            this.$router.push('/');
+                        })
+                        .catch((error) => {
+                            console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                        });
                     })
                     .catch((error) => {
-                        console.error("Erreur lors de l'ajout du tuple dans la collection 'User':", error);
+                        console.log(error);
                     });
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            }
         }
-      }
-    }
-  </script>
+        }
+    </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@600&display=swap');
