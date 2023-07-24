@@ -21,8 +21,8 @@
                 ></v-img>
               <v-card-title>
                 <v-icon v-if=" item.Type === 'Console'" color="red" icon="mdi-nintendo-game-boy" class="mr-1"></v-icon>
-                <v-icon v-if=" item.Type === 'Accessories'" color="grey" icon="mdi-video-input-scart" class="mr-1"></v-icon>
-                <v-icon v-if=" item.Type === 'Games'" color="yellow" icon="mdi-pac-man" class="mr-1"></v-icon>
+                <v-icon v-if=" item.Type === 'Accessorie'" color="grey" icon="mdi-video-input-scart" class="mr-1"></v-icon>
+                <v-icon v-if=" item.Type === 'Game'" color="yellow" icon="mdi-pac-man" class="mr-1"></v-icon>
                 {{ item.Name }}</v-card-title>
               <v-card-text>
                 <v-divider class="mb-3"></v-divider>
@@ -56,6 +56,8 @@
               <v-card-title>Ajout 2</v-card-title>
               <v-card-text>
                 <v-btn color="ghostPurple" class="mr-4" :to="'/additem'">Add item</v-btn>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/addgame'">Add game</v-btn>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/addaccessories'">Add accessories</v-btn>
               </v-card-text>
             </v-card>
           </v-col>

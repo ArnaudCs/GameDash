@@ -6,6 +6,10 @@ import HelloWorld from './components/HelloWorld.vue'
 import Login from './components/LoginComp.vue'
 import Register from './components/RegisterComp.vue'
 import AddItem from './components/AddItemComp.vue'
+import addGame from './components/AddGameComp.vue'
+import addAccessories from './components/AddAccessoriesComp.vue'
+import MyAccessoriesCollection from './components/MyAccessoriesCollectionComp.vue'
+import MyGameCollection from './components/MyGameCollectionComp.vue'
 import MyCollection from './components/MyCollectionComp.vue'
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -33,7 +37,11 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/profile', component: Register, meta: { requiresAuth: true }},
   { path: '/additem', component: AddItem, meta: { requiresAuth: true }},
-  { path: '/dashboard', component: MyCollection, meta: { requiresAuth: true }}
+  { path: '/dashboard', component: MyCollection, meta: { requiresAuth: true }},
+  { path: '/addgame', component: addGame, meta: { requiresAuth: true }},
+  { path: '/dashboard-games', component: MyGameCollection, meta: { requiresAuth: true }},
+  { path: '/dashboard-accessories', component: MyAccessoriesCollection, meta: { requiresAuth: true }},
+  { path: '/addaccessories', component: addAccessories, meta: { requiresAuth: true }},
 ];
 
 const getCurrentUser = () => {

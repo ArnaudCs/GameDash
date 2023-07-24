@@ -5,11 +5,11 @@
     <div class="main">
       <div class="actionBar">
         <v-btn @click="goBack" color="ghostPurple" icon="mdi-arrow-left" class="mr-4"></v-btn>
-        <h2>Your item collection</h2>
+        <h2>Your acessories</h2>
       </div>
   
       <div class="lastAddedDisplay">
-        <p class="lastAddedTitle">Your items</p>
+        <p class="lastAddedTitle">Your accessories</p>
         <div class="lastAddedCardContainer">
             <div v-if="this.myItems.length > 0">
                 <v-card v-for="item in myItems" :key="item.id" class="itemCard">
@@ -20,7 +20,6 @@
 
                         <v-col cols="12" sm="8">
                             <p>Brand : {{ item.Brand }}</p>
-                            <p>Model : {{ item.Model }}</p>
                             <p>Console : {{ item.Console }}</p>
                             <p>With Box : {{ item.OriginalBox ? 'Yes' : 'No' }}</p>
                             <p>Condition : {{ item.State }}</p>
@@ -29,7 +28,7 @@
                 </v-card>
             </div>
             <div v-else class="noLastItem">
-                <p>Your items will be displayed here</p>
+                <p>Your accessories will be displayed here</p>
             </div>
         </div>
       </div>
@@ -51,7 +50,7 @@
   });
   
   export default {
-    name: 'HelloWorld',
+    name: 'MyAccessoriesCollectionComp',
     components: { LoadingElement },
     data() {
       return {
@@ -88,7 +87,7 @@
   
           const db = getFirestore();
           const userCollection = collection(db, "User");
-          const itemCollection = collection(db, "Items");
+          const itemCollection = collection(db, "Accessories");
   
           const querySnapshot = await getDocs(query(userCollection, where("userId", "==", uid)));
   
@@ -115,7 +114,7 @@
             const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
   
             try {
-              const folderRef = ref(storageRef, `Items/${photoFolderName}`);
+              const folderRef = ref(storageRef, `Accessories/${photoFolderName}`);
               const folderList = await listAll(folderRef);
               const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
   
