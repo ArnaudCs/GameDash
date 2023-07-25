@@ -33,14 +33,6 @@
 
                 <div class="inputForm">
                     <v-select
-                        v-model="gameBrand"
-                        :items="brands"
-                        label="Game brand"
-                    ></v-select>
-                </div>
-
-                <div class="inputForm">
-                    <v-select
                         v-model="gameCondition"
                         :items="conditions"
                         label="Game condition"
@@ -323,28 +315,6 @@
               "Intellivision Amico"
             ],
 
-            brands: [
-                "Nintendo",
-                "Sony",
-                "Microsoft",
-                "Sega",
-                "Atari",
-                "SNK",
-                "NEC",
-                "Panasonic",
-                "Coleco",
-                "Mattel",
-                "Magnavox",
-                "Commodore",
-                "Philips",
-                "Tiger",
-                "Bandai",
-                "Amstrad",
-                "Sinclair",
-                "Fairchild",
-                "3DO",
-                "Neo Geo"
-            ],
             conditions: [
                 "New",
                 "Mint",
@@ -371,14 +341,13 @@
 
               const db = getFirestore();
 
-              if (this.image === '' || this.gameBrand === null || this.gameCondition === null || this.haveBox === '' || this.haveAllAccessories === '') {
+              if (this.image === '' || this.gameCondition === null || this.haveBox === '' || this.haveAllAccessories === '') {
                 this.missingFields = true;
                 return;
               } 
 
               //const db = getFirestore(); // Décommentez cette ligne pour initialiser l'instance de la base de données
               const UserId = this.userId;
-              const Brand = this.gameBrand;
               const Console = this.gameSystem;
               const Name = this.gameName;
               const OriginalBox = this.haveBox === 'Yes' ? true : false;
@@ -390,38 +359,37 @@
               const Type = "Game";
               const AddDate = new Date();
 
-                const userRef = collection(db, "Games");
-                addDoc(userRef, { UserId, Brand, Console, Name, OriginalBox, Publisher, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
-                    .then(async (userRef) => {
-                      this.successAddingItem = true;
+              const userRef = collection(db, "Games");
+              addDoc(userRef, { UserId, Console, Name, OriginalBox, Publisher, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
+                  .then(async (userRef) => {
+                    this.successAddingItem = true;
 
-                      const storage = getStorage();
-                      const storageRef = ref(storage, `Games/${userRef.id}`);
+                    const storage = getStorage();
+                    const storageRef = ref(storage, `Games/${this.userId}/${userRef.id}`);
 
-                      if (this.image !== '') {
-                        const imageRef = ref(storageRef, 'image1'); 
-                        await uploadString(imageRef, this.image, 'data_url');
-                      }
+                    if (this.image !== '') {
+                      const imageRef = ref(storageRef, 'image1'); 
+                      await uploadString(imageRef, this.image, 'data_url');
+                    }
 
-                      if (this.image2 !== '') {
-                        const imageRef = ref(storageRef, 'image2'); 
-                        await uploadString(imageRef, this.image2, 'data_url');
-                      }
+                    if (this.image2 !== '') {
+                      const imageRef = ref(storageRef, 'image2'); 
+                      await uploadString(imageRef, this.image2, 'data_url');
+                    }
 
-                      if (this.image3 !== '') {
-                        const imageRef = ref(storageRef, 'image3'); 
-                        await uploadString(imageRef, this.image3, 'data_url');
-                      }
+                    if (this.image3 !== '') {
+                      const imageRef = ref(storageRef, 'image3'); 
+                      await uploadString(imageRef, this.image3, 'data_url');
+                    }
 
-                      setTimeout(() => {
-                        this.$router.push('/');
-                      }, 2000);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        this.errorAddingItem = true;
-                    });
-                
+                    setTimeout(() => {
+                      this.$router.push('/');
+                    }, 2000);
+                  })
+                  .catch((error) => {
+                      console.log(error);
+                      this.errorAddingItem = true;
+                  });
               },
             async fetchUserData() {
                 const auth = getAuth();
@@ -544,7 +512,7 @@
   }
   .actionBar{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 2em;
   }

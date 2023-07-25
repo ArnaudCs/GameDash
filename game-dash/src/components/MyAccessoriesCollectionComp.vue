@@ -19,11 +19,13 @@
             <div v-if="this.myItems.length > 0">
                 <v-card v-for="item in myItems" :key="item.id" class="itemCard">
                     <v-row class="addItemRow" >
-                        <v-col cols="12" sm="4" class="coverColumn">
-                            <v-img class="ItemsImages" height="250" :src="item.photoURL" cover></v-img>
+                        <v-col cols="12" sm="3" class="coverColumn">
+                            <v-img class="ItemsImages" height="180" :src="item.photoURL" cover></v-img>
                         </v-col>
 
-                        <v-col cols="12" sm="8">
+                        <v-col cols="12" sm="9">
+                            <p class="cardTitle"><v-icon icon="mdi-video-input-scart" class="mr-1"></v-icon>{{ item.Name }}</p>
+                            <v-divider class="my-3" thickness="3"></v-divider>
                             <p>Brand : {{ item.Brand }}</p>
                             <p>Console : {{ item.Console }}</p>
                             <p>With Box : {{ item.OriginalBox ? 'Yes' : 'No' }}</p>
@@ -89,6 +91,7 @@
   
         if (user) {
           const uid = user.uid;
+          this.userId = uid;
   
           const db = getFirestore();
           const userCollection = collection(db, "User");
@@ -119,7 +122,7 @@
             const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
   
             try {
-              const folderRef = ref(storageRef, `Accessories/${photoFolderName}`);
+              const folderRef = ref(storageRef, `Accessories/${this.userId}/${photoFolderName}`);
               const folderList = await listAll(folderRef);
               const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
   
@@ -164,6 +167,12 @@
   </script>
   
   <style scoped>
+
+  .cardTitle{
+    font-family: 'Public Sans', sans-serif;
+    font-size: 1.3em;
+    color: #FFFFFF;
+  }
 
   .ItemsImages{
     border-radius: 1em; 

@@ -143,7 +143,7 @@ export default {
           const photoFolderName = doc.id; // Nom du dossier photo à partir du nom du document
 
           try {
-            const folderRef = ref(storageRef, `Items/${photoFolderName}`);
+            const folderRef = ref(storageRef, `Items/${uid}/${photoFolderName}`);
             const folderList = await listAll(folderRef);
             const firstPhotoRef = folderList.items[0]; // Sélectionnez le premier fichier dans la liste
 

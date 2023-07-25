@@ -380,7 +380,7 @@
                       this.successAddingItem = true;
 
                       const storage = getStorage();
-                      const storageRef = ref(storage, `Accessories/${userRef.id}`);
+                      const storageRef = ref(storage, `Accessories/${this.userId}/${userRef.id}`);
 
                       if (this.image !== '') {
                         const imageRef = ref(storageRef, 'image1'); 

@@ -24,6 +24,10 @@
                 </div>
 
                 <div class="inputForm">
+                    <v-text-field clearable label="Item Serial Number" v-model="serialNumber"></v-text-field>
+                </div>
+
+                <div class="inputForm">
                     <v-select
                         v-model="gameSystem"
                         :items="consoles"
@@ -174,6 +178,7 @@
             itemModel: '',
             gameSystem: '',
             purchasePrice: '',
+            serialNumber: '',
             consoles: [
               "SP",
               "PS Vita",
@@ -387,16 +392,17 @@
               const State = this.itemCondition;
               const Particularities = this.itemParticularities;
               const PurchasePrice = this.purchasePrice;
+              const serialNumber = this.serialNumber;
               const Type = "Console";
               const AddDate = new Date();
 
                 const userRef = collection(db, "Items");
-                addDoc(userRef, { UserId, Brand, Console, Model, Name, OriginalBox, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
+                addDoc(userRef, { UserId, Brand, Console, Model, serialNumber, Name, OriginalBox, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
                     .then(async (userRef) => {
                       this.successAddingItem = true;
 
                       const storage = getStorage();
-                      const storageRef = ref(storage, `Items/${userRef.id}`);
+                      const storageRef = ref(storage, `Items/${this.userId}/${userRef.id}`);
 
                       if (this.image !== '') {
                         const imageRef = ref(storageRef, 'image1'); 
