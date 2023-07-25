@@ -53,11 +53,11 @@
           <v-col cols="12" sm="8">
             <p class="addItemTitle">Add an Item to your collection to keep track</p>
             <v-card class="lastAddedCard mt-5">
-              <v-card-title>Ajout 2</v-card-title>
+              <v-card-title>Add a console, a game or an accessory</v-card-title>
               <v-card-text>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/additem'">Add item</v-btn>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/addgame'">Add game</v-btn>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/addaccessories'">Add accessories</v-btn>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/additem'" rounded="pill" prepend-icon="mdi-nintendo-game-boy">Add item</v-btn>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/addgame'" rounded="pill" prepend-icon="mdi-pac-man">Add game</v-btn>
+                <v-btn color="ghostPurple" class="mr-4" :to="'/addaccessories'" rounded="pill" prepend-icon="mdi-video-input-scart">Add accessories</v-btn>
               </v-card-text>
             </v-card>
           </v-col>

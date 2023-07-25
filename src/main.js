@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
-import HelloWorld from './components/HelloWorld.vue'
+import HomePage from './components/HomePage.vue'
 import Login from './components/LoginComp.vue'
 import Register from './components/RegisterComp.vue'
 import AddItem from './components/AddItemComp.vue'
@@ -33,7 +33,7 @@ loadFonts()
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const routes = [
-  { path: '/', component: HelloWorld, meta: { requiresAuth: true } },
+  { path: '/', component: HomePage, meta: { requiresAuth: true } },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Register, meta: { requiresAuth: true }},
