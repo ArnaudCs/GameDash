@@ -53,12 +53,24 @@
           <v-col cols="12" sm="8">
             <p class="addItemTitle">Add an Item to your collection to keep track</p>
             <v-card class="lastAddedCard mt-5">
-              <v-card-title>Add a console, a game or an accessory</v-card-title>
-              <v-card-text>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/additem'" rounded="pill" prepend-icon="mdi-nintendo-game-boy">Add item</v-btn>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/addgame'" rounded="pill" prepend-icon="mdi-pac-man">Add game</v-btn>
-                <v-btn color="ghostPurple" class="mr-4" :to="'/addaccessories'" rounded="pill" prepend-icon="mdi-video-input-scart">Add accessories</v-btn>
-              </v-card-text>
+              <p class="titleCardItem">Add a console, a game or an accessory</p>
+              <v-row class="addButtons">
+                <v-col cols="12" sm="4">
+                  <v-card color="ghostPurple" class="btnCard" :to="'/additem'">
+                    <v-card-title><v-icon icon="mdi-nintendo-game-boy" class="mr-1"></v-icon>Add a console</v-card-title>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-card color="info" class="btnCard" :to="'/addgame'">
+                    <v-card-title><v-icon icon="mdi-pac-man" class="mr-1"></v-icon>Add a game</v-card-title>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-card color="grey" class="btnCard" :to="'/addaccessories'">
+                    <v-card-title><v-icon icon="mdi-video-input-scart" class="mr-1"></v-icon>Add an accessory</v-card-title>
+                  </v-card>
+                </v-col>
+              </v-row>
             </v-card>
           </v-col>
         </v-row>
@@ -189,6 +201,26 @@ export default {
 
 <style scoped>
 
+.btnCard{
+  border-radius: 1em;
+  padding: 1em;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.titleCardItem{
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1.2em;
+  color: #FFFFFF;
+  margin-bottom: 1em;
+}
+
+.addButtons{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .noLastItem{
   display: flex;
   justify-content: center;
@@ -198,7 +230,8 @@ export default {
 }
 
 .projectImages{
-  object-fit: none !important;
+  width: 100%;
+  height: 100%;
 }
 
 .main{
@@ -233,6 +266,8 @@ export default {
 
 .lastAddedCard{
   border-radius: 1em;
+  padding: 1em;
+  flex-wrap: wrap;
 }
 
 .lastAddedColumn{

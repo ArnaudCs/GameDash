@@ -17,13 +17,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCJ1BwXUBe4_itvJviVZwuqOzhDz3J43mE",
-  authDomain: "gamedash-27ea0.firebaseapp.com",
-  projectId: "gamedash-27ea0",
-  storageBucket: "gamedash-27ea0.appspot.com",
-  messagingSenderId: "318785995771",
-  appId: "1:318785995771:web:b66d8b3e2d2c46e497415e",
-  measurementId: "G-46LGEEZCZG"
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
 };
 
 initializeApp(firebaseConfig);

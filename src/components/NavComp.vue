@@ -77,8 +77,23 @@
           ex11: 'enable',
           menus: [
             {
-              title: 'My collection', // Ajoutez le bouton "Dashboard"
+              title: 'Collection', // Ajoutez le bouton "Dashboard"
               link: '/dashboard',
+              icon: 'mdi-view-dashboard',
+            },
+            {
+              title: 'Consoles', // Ajoutez le bouton "Dashboard"
+              link: '/dashboard-items',
+              icon: 'mdi-view-dashboard',
+            },
+            {
+              title: 'Games', // Ajoutez le bouton "Dashboard"
+              link: '/dashboard-games',
+              icon: 'mdi-view-dashboard',
+            },
+            {
+              title: 'Accesories', // Ajoutez le bouton "Dashboard"
+              link: '/dashboard-accessories',
               icon: 'mdi-view-dashboard',
             },
           ]
