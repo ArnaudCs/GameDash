@@ -28,19 +28,19 @@
                 </div>
 
                 <div class="inputForm">
-                    <v-select
+                    <v-autocomplete
                         v-model="gameSystem"
                         :items="consoles"
                         label="Console"
-                    ></v-select>
+                    ></v-autocomplete>
                 </div>
 
                 <div class="inputForm">
-                    <v-select
+                    <v-autocomplete
                         v-model="itemBrand"
                         :items="brands"
                         label="Item brand"
-                    ></v-select>
+                    ></v-autocomplete>
                 </div>
 
                 <div class="inputForm">
@@ -73,6 +73,21 @@
 
                 <div class="inputForm">
                   <v-text-field clearable label="Item purchase price" type="number" v-model="purchasePrice"></v-text-field>
+                </div>
+
+                <div class="inputForm">
+                  <v-select
+                    v-model="itemTags"
+                    :items="tags"
+                    chips
+                    label="Tags"
+                    multiple
+                    taggable
+                  ></v-select>
+                </div>
+
+                <div class="inputForm mb-7" style="display: flex; justify-content: flex-end;">
+                  <v-btn @click="addTagDialog = true" variant="elevated" color="ghostPurple" density="comfortable" rounded="pill">Add Tag</v-btn>
                 </div>
 
                 <h2 class="mb-4">Show us your item</h2>
@@ -134,6 +149,41 @@
       </div>
     </div>
 
+    <div>
+        <div class="mb-4">
+            <v-col cols="auto">
+                <v-dialog
+                    transition="dialog-top-transition" class="newTimeProposalDialog" v-model="addTagDialog">
+                    <template v-slot:default="{ isActive }">
+                    <v-card>
+                        <form>
+                        <v-toolbar
+                            color="ghostPurple"
+                            class="text-center"
+                            title="Add a new tag"
+                        ></v-toolbar>
+                        <v-card-text>
+                            <v-text-field clearable label="New Tag" type="text" v-model="newTag"></v-text-field>
+                        </v-card-text>
+                        <v-card-actions class="justify-end">
+                            <v-btn
+                                variant="text"
+                                @click="isActive.value = false"
+                            >Annuler</v-btn>
+                            <v-btn
+                                variant="elevated"
+                                color="ghostPurple"
+                                @click="addItem"
+                            >Add</v-btn>
+                        </v-card-actions>
+                        </form>
+                    </v-card>
+                    </template>
+                </v-dialog>
+            </v-col>
+        </div>
+    </div>
+
     <v-snackbar v-model="missingFields" color="error" :timeout="2000" location="bottom">
         Missings item informations, please fill all the fields.
     </v-snackbar>
@@ -147,7 +197,7 @@
     import LoadingElement from './LoadingElement.vue';
     import { onMounted, reactive } from "vue";
     import { getAuth, onAuthStateChanged } from "firebase/auth";
-    import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+    import { getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc} from "firebase/firestore";
     import { getStorage, ref, uploadString} from "firebase/storage";
     
     let auth;
@@ -162,11 +212,15 @@
         data() {
         return {
             state,
+            tags: [],
+            itemTags: [],
+            addTagDialog: false,
+            userId: '',
             email: '',
             image: '',
             image2: '',
             image3: '',
-            userId: '',
+            newTag: '',
             haveBox: 'No',
             haveAllAccessories: 'No',
             itemParticularities: '',
@@ -327,7 +381,6 @@
               "Neo Geo Mini Pro Player Pack",
               "Intellivision Amico"
             ],
-
             brands: [
                 "Nintendo",
                 "Sony",
@@ -372,16 +425,22 @@
         this.fetchUserData();
         },
         methods: {
+          addItem() {
+            if (this.newTag === '') return;
+            const newTag = this.newTag;
+            this.tags.push(newTag);
+            this.newTag = '';
+            this.itemTags.push(newTag);
+            this.addTagDialog = false;
+          },
           async validate() {
-
               const db = getFirestore();
 
               if (this.image === '' || this.itemBrand === null || this.itemCondition === null || this.haveBox === '' || this.haveAllAccessories === '') {
                 this.missingFields = true;
                 return;
-              } 
+              }
 
-              //const db = getFirestore(); // Décommentez cette ligne pour initialiser l'instance de la base de données
               const UserId = this.userId;
               const Brand = this.itemBrand;
               const Console = this.gameSystem;
@@ -394,47 +453,71 @@
               const PurchasePrice = this.purchasePrice;
               const serialNumber = this.serialNumber;
               const Type = "Console";
+              const Tags = this.itemTags;
               const AddDate = new Date();
 
-                const userRef = collection(db, "Items");
-                addDoc(userRef, { UserId, Brand, Console, Model, serialNumber, Name, OriginalBox, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
-                    .then(async (userRef) => {
-                      this.successAddingItem = true;
+              const userRef = collection(db, "Items");
+              const userCollectionRef = collection(db, "User");
 
-                      const storage = getStorage();
-                      const storageRef = ref(storage, `Items/${this.userId}/${userRef.id}`);
+              addDoc(userRef, { UserId, Brand, Console, Tags, Model, serialNumber, Name, OriginalBox, AllAccessories, State, Particularities, PurchasePrice, Type, AddDate })
+                  .then(async (userRef) => {
+                    //update tags
+                    const userQuerySnapshot = await getDocs(query(userCollectionRef, where("userId", "==", this.userId)));
 
-                      if (this.image !== '') {
-                        const imageRef = ref(storageRef, 'image1'); 
-                        await uploadString(imageRef, this.image, 'data_url');
-                      }
+                    userQuerySnapshot.forEach((userDoc) => {
+                      const userData = userDoc.data();
+                      console.log(userData);
+                      const userDocId = userDoc.id;
+                      console.log(userDocId);
 
-                      if (this.image2 !== '') {
-                        const imageRef = ref(storageRef, 'image2'); 
-                        await uploadString(imageRef, this.image2, 'data_url');
-                      }
+                      userData.userTag = this.tags; 
 
-                      if (this.image3 !== '') {
-                        const imageRef = ref(storageRef, 'image3'); 
-                        await uploadString(imageRef, this.image3, 'data_url');
-                      }
-
-                      setTimeout(() => {
-                        this.$router.push('/');
-                      }, 2000);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        this.errorAddingItem = true;
+                      updateDoc(doc(db, "User", userDocId), { userTag: userData.userTag })
+                        .then(() => {
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
                     });
-                
-              },
-            async fetchUserData() {
-                const auth = getAuth();
-                const user = auth.currentUser;
-        
-                if (user) {
+
+                    //add item images
+
+                    const storage = getStorage();
+                    const storageRef = ref(storage, `Items/${this.userId}/${userRef.id}`);
+
+                    if (this.image !== '') {
+                      const imageRef = ref(storageRef, 'image1'); 
+                      await uploadString(imageRef, this.image, 'data_url');
+                    }
+
+                    if (this.image2 !== '') {
+                      const imageRef = ref(storageRef, 'image2'); 
+                      await uploadString(imageRef, this.image2, 'data_url');
+                    }
+
+                    if (this.image3 !== '') {
+                      const imageRef = ref(storageRef, 'image3'); 
+                      await uploadString(imageRef, this.image3, 'data_url');
+                    }
+
+                    this.successAddingItem = true;
+
+                    setTimeout(() => {
+                      this.$router.push('/');
+                    }, 2000);
+                  })
+                  .catch((error) => {
+                      console.log(error);
+                      this.errorAddingItem = true;
+                  });
+          },
+          async fetchUserData() {
+              const auth = getAuth();
+              const user = auth.currentUser;
+      
+              if (user) {
                 const uid = user.uid;
+                this.userId = uid;
         
                 const db = getFirestore();
                 const userCollection = collection(db, "User");
@@ -445,59 +528,60 @@
                     const userData = doc.data();
                     this.userId = userData.userId;
                     this.nickName = userData.userName;
+                    this.tags = userData.userTag;
                     this.isLoading = false;
                 });
-                } else {
-                  console.log('No user connected');
-                }
-            },
-            goBack() {
-                window.history.back(); // Simule un clic sur le bouton de retour du navigateur
-            },
-            removeFile(index) {
+
+              } else {
+                console.log('No user connected');
+              }
+          },
+          goBack() {
+              window.history.back(); // Simule un clic sur le bouton de retour du navigateur
+          },
+          removeFile(index) {
+            if (index === 1) {
+              this.image = '';
+            } else if (index === 2) {
+              this.image2 = '';
+            } else if (index === 3) {
+              this.image3 = '';
+            }
+          },
+
+          onDrop(index, event) {
+            event.stopPropagation();
+            event.preventDefault();
+            var files = event.dataTransfer.files;
+            this.createFile(files[0], index);
+          },
+
+          onChange(index, event) {
+            var files = event.target.files;
+            this.createFile(files[0], index);
+          },
+
+          createFile(file, index) {
+            if (!file.type.match('image.*')) {
+              alert('Select an image');
+              return;
+            }
+
+            var reader = new FileReader();
+            var vm = this;
+
+            reader.onload = function(e) {
               if (index === 1) {
-                this.image = '';
+                vm.image = e.target.result;
               } else if (index === 2) {
-                this.image2 = '';
+                vm.image2 = e.target.result;
               } else if (index === 3) {
-                this.image3 = '';
+                vm.image3 = e.target.result;
               }
-            },
+            };
 
-            onDrop(index, event) {
-              event.stopPropagation();
-              event.preventDefault();
-              var files = event.dataTransfer.files;
-              this.createFile(files[0], index);
-            },
-
-            onChange(index, event) {
-              var files = event.target.files;
-              this.createFile(files[0], index);
-            },
-
-            createFile(file, index) {
-              if (!file.type.match('image.*')) {
-                alert('Select an image');
-                return;
-              }
-
-              var reader = new FileReader();
-              var vm = this;
-
-              reader.onload = function(e) {
-                if (index === 1) {
-                  vm.image = e.target.result;
-                } else if (index === 2) {
-                  vm.image2 = e.target.result;
-                } else if (index === 3) {
-                  vm.image3 = e.target.result;
-                }
-              };
-
-              reader.readAsDataURL(file);
-            },
-
+            reader.readAsDataURL(file);
+          },
         },
         setup() {
             onMounted(() => {
@@ -512,6 +596,15 @@
 </script>
   
   <style scoped>
+
+  .newTimeProposalDialog{
+    width: 40%;
+  }
+
+  .addTag{
+    display: flex;
+    justify-content: space-between;
+  }
 
   .titleContainer{
     display: flex;
@@ -692,6 +785,10 @@
 
     @media screen and (max-width: 768px) {
       .inputForm{
+        width: 90%;
+      }
+
+      .newTimeProposalDialog{
         width: 90%;
       }
     }

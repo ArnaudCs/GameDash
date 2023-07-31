@@ -201,6 +201,10 @@ export default {
 
 <style scoped>
 
+.ItemsImages{
+  border-radius: 1em;
+}
+
 .btnCard{
   border-radius: 1em;
   padding: 1em;

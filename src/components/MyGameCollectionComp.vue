@@ -30,6 +30,15 @@
                             <p>Console : {{ item.Console }}</p>
                             <p>With Box : {{ item.OriginalBox ? 'Yes' : 'No' }}</p>
                             <p>Condition : {{ item.State }}</p>
+                            <p>Price : {{ item.PurchasePrice }} €</p>
+                            <p class="mt-2">Tags : 
+                                <span v-for="tag in item.Tags" :key="tag" class="mr-1">
+                                  <v-chip color="white" text-color="white" small>{{ tag }}</v-chip>
+                                </span>
+                                <span v-if="!(item.Tags) || item.Tags.length === 0">
+                                  <v-icon icon="mdi-cancel" class="mr-1"></v-icon>No tags
+                                </span>
+                            </p>
                         </v-col>
                     </v-row>
                 </v-card>
@@ -175,6 +184,11 @@
 
   .ItemsImages{
     border-radius: 1em; 
+  }
+
+  .ItemsImages:hover{
+    transform: scale(1.1);
+    transition: transform 0.5s;
   }
 
   .itemCard{
