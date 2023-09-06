@@ -467,6 +467,8 @@
 
                     this.successAddingItem = true;
 
+                    this.isLoading = true;
+
                     setTimeout(() => {
                       this.$router.push('/');
                     }, 2000);

@@ -71,6 +71,7 @@
     data() {
       return {
         state,
+        visible: true,
         nickName: '',
         email: '',
         userId: '',
@@ -176,6 +177,13 @@
   
   <style scoped>
 
+  .cardActionsTitle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
   .cardTitle{
     font-family: 'Public Sans', sans-serif;
     font-size: 1.3em;

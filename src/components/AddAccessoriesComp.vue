@@ -397,6 +397,8 @@
                         await uploadString(imageRef, this.image3, 'data_url');
                       }
 
+                      this.isLoading = true;
+
                       setTimeout(() => {
                         this.$router.push('/');
                       }, 2000);
